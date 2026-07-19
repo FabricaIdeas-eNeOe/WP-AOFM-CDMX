@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AOFM Waterpolo</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&amp;display=swap" rel="stylesheet"/>
+<style>
+
+body{
+  margin:0;
+  font-family:'Montserrat',sans-serif;
+
+  background:
+    linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.15)),
+    url('background.png');
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  padding:80px 20px 10px;
+}
+
+.title{
+  display:inline-block;
+  font-size:42px;
+  font-weight:800;
+  color:#0a4f73;
+  padding:18px 60px;
+
+  background:rgba(255,255,255,0.25);
+  backdrop-filter:blur(25px);
+
+  border-radius:30px;
+  border:1px solid rgba(255,255,255,0.6);
+
+  position:relative;
+  overflow:hidden;
+}
+
+.title::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.6) 50%,transparent 70%);
+  animation:wave 3s infinite linear;
+}
+
+@keyframes wave{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+
+.subtitle{
+  margin-top:10px;
+  font-size:14px;
+  color:#5c7f91;
+}
+
+/* TOURNAMENTS TITLE (LEFT ALIGNED) */
+.section-title{
+  max-width:1100px;
+  margin:20px auto 0;
+  padding:0 20px;
+
+  font-size:18px;
+  font-weight:600;
+  color:#0a4f73;
+
+  text-align:left;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:40px;
+
+  max-width:1100px;
+  margin:0 auto;
+
+  padding:20px 20px 140px;
+}
+
+/* CARDS */
+.card{
+  text-decoration:none;
+  color:inherit;
+
+  border-radius:28px;
+  overflow:hidden;
+
+  background:rgba(255,255,255,0.40);
+  backdrop-filter:blur(12px);
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.2),
+    inset 0 1px 4px rgba(255,255,255,0.5);
+
+  transition:0.35s;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+}
+
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:18px;
+  text-align:center;
+}
+
+.card-content h3{
+  margin:0;
+  font-size:18px;
+  color:#0a4f73;
+}
+
+.card-content p{
+  margin:6px 0 0;
+  font-size:13px;
+  opacity:0.75;
+}
+
+/* FOOTER BAND */
+.footer{
+  position:fixed;
+  bottom:30px; /* 👈 pushes band UP */
+  width:100%;
+
+  text-align:center;
+  padding:14px 10px;
+
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(12px);
+}
+
+.footer img{
+  height:34px;
+  margin:0 8px;
+}
+
+/* 👇 TEXT BELOW THE BAND */
+.copyright{
+  position:fixed;
+  bottom:5px;
+
+  width:100%;
+  text-align:center;
+
+  font-size:11px; /* 👈 smaller */
+  font-weight:500;
+
+  color:#5c7f91;
+  opacity:0.8;
+}
+
+/* LOGOS */
+.footer img{
+  height:34px;
+  margin:0 8px;
+}
+
+
+/* MOBILE */
+@media (max-width:600px){
+
+  body{
+    background-attachment:scroll;
+  }
+
+  .title{
+    font-size:28px;
+    padding:14px 30px;
+  }
+
+  .grid{
+    gap:25px;
+  }
+
+}
+
+</style>
+</head>
+<body>
+<div class="header">
+<div class="title">AOFM WATERPOLO</div>
+<div class="subtitle">Official Photo Gallery Platform</div>
+</div>
+<div class="section-title">Tournaments</div>
+<div class="grid">
+<a class="card" href="campeonato2026.html">
+<img src="waterpolo.jpg"/>
+<div class="card-content">
+<h3>Campeonato Nacional</h3>
+<p>CDMX • 4 categorías</p>
+</div>
+</a>
+<a class="card" href="conade2026.html">
+<img src="polo_conade.png"/>
+<div class="card-content">
+<h3>Juegos CONADE 2026</h3>
+<p>CDMX • 4 categorías</p>
+</div>
+</a>
+<a class="card" href="#">
+<img src="championship_cover.png"/>
+<div class="card-content">
+<h3>U16 Waterpolo Championships</h3>
+<p>Selección Mexicana Sub16</p>
+</div>
+</a>
+</div>
+<div class="footer">
+<div class="footer-logos">
+<img src="logo-aofm.png"/>
+<img src="logo-club.png"/>
+<img src="logo-olimpicos.png"/>
+</div>
+</div>
+<div class="copyright">
+  © 2026 AOFM WATERPOLO / @eneoe
+</div>
+</body>
+</html>
