@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juegos CONADE 2026</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* EXACT SAME CSS — NO CHANGES */
+
+body{
+  margin:0;
+  font-family:'Montserrat',sans-serif;
+
+  background:
+    linear-gradient(rgba(255,255,255,0.25), rgba(255,255,255,0.15)),
+    url('background.png');
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+}
+
+.header{
+  text-align:center;
+  padding:80px 20px 40px;
+}
+
+.title{
+  display:inline-block;
+  font-size:42px;
+  font-weight:800;
+  color:#0a4f73;
+  padding:18px 60px;
+
+  background:rgba(255,255,255,0.25);
+  backdrop-filter:blur(25px);
+
+  border-radius:30px;
+  border:1px solid rgba(255,255,255,0.6);
+
+  position:relative;
+  overflow:hidden;
+}
+
+.title::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,0.6) 50%,transparent 70%);
+  animation:wave 3s infinite linear;
+}
+
+@keyframes wave{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:40px;
+
+  max-width:1200px;
+  margin:0 auto;
+
+  padding:30px 20px 140px;
+}
+
+.card{
+  text-decoration:none;
+  color:inherit;
+
+  border-radius:28px;
+  overflow:hidden;
+
+  background:rgba(255,255,255,0.28);
+  backdrop-filter:blur(18px);
+
+  box-shadow:
+    0 20px 45px rgba(0,0,0,0.25),
+    inset 0 1px 6px rgba(255,255,255,0.6);
+
+  transition:0.35s;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+}
+
+.card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:20px;
+  text-align:center;
+}
+
+.card-content h3{
+  margin:0;
+  font-size:20px;
+  color:#0a4f73;
+}
+
+.card-content p{
+  margin:8px 0 0;
+  font-size:14px;
+  opacity:0.75;
+}
+
+.footer{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  text-align:center;
+  padding:10px;
+  background:rgba(255,255,255,0.85);
+}
+
+.footer img{
+  height:36px;
+  margin:0 8px;
+}
+
+.admin-bottom-right{
+  position:fixed;
+  bottom:0;
+  right:0;
+  width:80px;
+  height:60px;
+  opacity:0;
+}
+
+.admin-top-left{
+  position:fixed;
+  top:0;
+  left:0;
+  width:80px;
+  height:60px;
+  opacity:0;
+}
+
+.admin-top-right{
+  position:fixed;
+  top:0;
+  right:0;
+  width:80px;
+  height:60px;
+  opacity:0;
+}
+
+@media (max-width:600px){
+
+  body{
+    background-attachment:scroll;
+  }
+
+  .title{
+    font-size:28px;
+    padding:14px 30px;
+  }
+
+  .grid{
+    gap:25px;
+  }
+
+  .card img{
+    height:180px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+  <div class="title">Juegos CONADE 2026</div>
+</div>
+
+<div class="grid">
+
+<!-- ✅ UPDATED LINKS -->
+
+<a href="gallery.html?t=CONADE2026&cat=infmenor" class="card">
+  <img src="polo_conade.png">
+  <div class="card-content">
+    <h3>Infantil Menor</h3>
+    <p>Matches & Gallery</p>
+  </div>
+</a>
+
+<a href="gallery.html?t=CONADE2026&cat=infmayor" class="card">
+  <img src="CN2026_MYR.jpg">
+  <div class="card-content">
+    <h3>Infantil Mayor</h3>
+    <p>Matches & Gallery</p>
+  </div>
+</a>
+
+<a href="gallery.html?t=CONADE2026&cat=juvenil" class="card">
+  <img src="juvenil.jpg">
+  <div class="card-content">
+    <h3>Juvenil</h3>
+    <p>Matches & Gallery</p>
+  </div>
+</a>
+
+<a href="gallery.html?t=CONADE2026&cat=junior" class="card">
+  <img src="CN2026_JNR.jpg">
+  <div class="card-content">
+    <h3>Junior</h3>
+    <p>Matches & Gallery</p>
+  </div>
+</a>
+
+</div>
+
+<div class="footer">
+  <img src="logo-aofm.png">
+  <img src="logo-club.png">
+  <img src="logo-olimpicos.png">
+</div>
+
+<div class="admin-bottom-right" onclick="window.location='index.html'"></div>
+<div class="admin-top-left" onclick="window.location='index.html'"></div>
+<div class="admin-top-right" onclick="window.location.reload()"></div>
+
+</body>
+</html>
