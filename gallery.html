@@ -162,6 +162,8 @@ body.lightbox-open{overflow:hidden;}
 
 const cloud="du4pmuch7";
 const params=new URLSearchParams(window.location.search);
+
+const tournament=params.get("t") || "CN2026";
 const category=params.get("cat");
 
 if(!category){
@@ -171,7 +173,7 @@ if(!category){
 
 document.getElementById("title").innerText=category.toUpperCase();
 
-const API=`https://wp-aofm-cdmx.vercel.app/api/images?folder=WP2026/CN2026/${category}/gallery`;
+const API=`https://wp-aofm-cdmx.vercel.app/api/images?folder=WP2026/${tournament}/${category}/gallery`;
 
 let ALL=[];
 let currentRival="";
