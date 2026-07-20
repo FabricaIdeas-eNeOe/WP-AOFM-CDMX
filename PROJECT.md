@@ -142,3 +142,4 @@ Objectives
 # Notes
 
 This document is the official reference for the project.
+Last updated: July 2026
