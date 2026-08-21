@@ -154,7 +154,6 @@ body.lightbox-open{overflow:hidden;}
 
 <!-- LIGHTBOX -->
 <div id="lightbox" class="lightbox">
-  <div class="download" id="downloadBtn">Download</div>
   <img id="lightbox-img">
 </div>
 
@@ -260,7 +259,7 @@ Object.keys(groups).forEach(date=>{
 
 const lightbox=document.getElementById("lightbox");
 const imgEl=document.getElementById("lightbox-img");
-const downloadBtn=document.getElementById("downloadBtn");
+
 
 let scale=1;
 let posX=0,posY=0;
@@ -285,7 +284,7 @@ function showImage(){
   const url=`https://res.cloudinary.com/${cloud}/image/upload/${id}.jpg`;
   imgEl.src=url;
 
-  downloadBtn.onclick=()=>window.open(url);
+
 
   // preload next
   const next=new Image();
