@@ -171,7 +171,13 @@ if(!category){
   throw new Error("Blocked");
 }
 
-document.getElementById("title").innerText=category.toUpperCase();
+let pageTitle=category.toUpperCase();
+
+if(tournament==="WORLD2026" && category.toLowerCase()==="u16"){
+  pageTitle="World Aquatics Men’s U16 Water Polo Championships 2026. Zagreb, CRO";
+}
+
+document.getElementById("title").innerText=pageTitle;
 
 const API=`https://wp-aofm-cdmx.vercel.app/api/images?folder=WP2026/${tournament}/${category}/gallery`;
 
@@ -207,10 +213,18 @@ function prepareMatches(){
   const groups={};
 
   filtered.forEach(img=>{
-    const date=img.split("_")[4];
-    if(!groups[date]) groups[date]=[];
-    groups[date].push(img);
+  const date=img.split("_")[4];
+  if(!groups[date]) groups[date]=[];
+  groups[date].push(img);
+});
+
+Object.keys(groups).forEach(date=>{
+  groups[date].sort((a,b)=>{
+    const numA=parseInt(a.split("_").pop(),10);
+    const numB=parseInt(b.split("_").pop(),10);
+    return numA-numB;
   });
+});
 
   matches=Object.keys(groups).sort().map(date=>({date,images:groups[date]}));
 
