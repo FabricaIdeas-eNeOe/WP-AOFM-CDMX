@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'Montserrat',sans-serif;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,0.25),
+      rgba(255,255,255,0.15)
+    ),
+    url('background.png');
+
+  background-size:cover;
+  background-attachment:fixed;
+  color:#0a4f73;
+}
+
+/* =========================
+   PASSWORD SCREEN
+   ========================= */
+
+.login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+}
+
+.login-box{
+  width:min(430px,100%);
+  padding:45px 35px;
+  text-align:center;
+
+  background:rgba(255,255,255,0.45);
+  border:1px solid rgba(255,255,255,0.6);
+  border-radius:30px;
+
+  backdrop-filter:blur(15px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.12);
+}
+
+.login-box h1{
+  margin:0 0 10px;
+  font-size:32px;
+  font-weight:800;
+}
+
+.login-box p{
+  margin:0 0 25px;
+  color:#456;
+}
+
+.password{
+  width:100%;
+  padding:14px 18px;
+  border:none;
+  border-radius:20px;
+
+  background:rgba(255,255,255,0.8);
+  font-family:'Montserrat',sans-serif;
+  font-size:16px;
+  outline:none;
+}
+
+.enter{
+  margin-top:15px;
+  padding:12px 28px;
+
+  border:none;
+  border-radius:20px;
+
+  background:#0a4f73;
+  color:white;
+
+  font-family:'Montserrat',sans-serif;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.enter:hover{
+  opacity:.9;
+}
+
+.error{
+  margin-top:15px;
+  color:#b00020;
+  font-size:14px;
+  display:none;
+}
+
+
+/* =========================
+   PERSONAL HOME
+   ========================= */
+
+#personal{
+  display:none;
+}
+
+.header{
+  text-align:center;
+  padding:60px 20px 30px;
+}
+
+.title{
+  display:inline-block;
+
+  font-size:32px;
+  font-weight:800;
+
+  color:#0a4f73;
+
+  padding:14px 40px;
+
+  background:rgba(255,255,255,0.30);
+  border-radius:25px;
+}
+
+.subtitle{
+  margin-top:15px;
+  color:#52758a;
+}
+
+
+/* =========================
+   SECTIONS
+   ========================= */
+
+.sections{
+  max-width:1000px;
+  margin:0 auto;
+  padding:20px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(280px,1fr)
+  );
+
+  gap:25px;
+}
+
+.card{
+  display:block;
+
+  background:rgba(255,255,255,0.45);
+
+  border-radius:25px;
+  overflow:hidden;
+
+  cursor:pointer;
+
+  backdrop-filter:blur(10px);
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.10);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.16);
+}
+
+.card-image{
+  height:220px;
+
+  background-size:cover;
+  background-position:center;
+}
+
+.card-content{
+  padding:22px;
+  text-align:center;
+}
+
+.card-content h2{
+  margin:0 0 8px;
+
+  color:#0a4f73;
+
+  font-size:24px;
+  font-weight:800;
+}
+
+.card-content p{
+  margin:0;
+  color:#456;
+}
+
+
+/* =========================
+   GALLERY
+   ========================= */
+
+.gallery-page{
+  display:none;
+}
+
+.gallery-header{
+  text-align:center;
+  padding:35px 20px 20px;
+}
+
+.back{
+  display:inline-block;
+
+  margin-bottom:20px;
+
+  padding:9px 18px;
+
+  border:none;
+  border-radius:20px;
+
+  background:rgba(255,255,255,0.55);
+  color:#0a4f73;
+
+  font-family:'Montserrat',sans-serif;
+  font-weight:600;
+
+  cursor:pointer;
+}
+
+.gallery-title{
+  margin:0;
+
+  font-size:30px;
+  font-weight:800;
+}
+
+.gallery-grid{
+  padding:20px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(160px,1fr));
+
+  gap:10px;
+
+  max-width:1400px;
+  margin:auto;
+}
+
+.gallery-grid img{
+  width:100%;
+  height:160px;
+
+  object-fit:cover;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  transition:transform .2s ease;
+}
+
+.gallery-grid img:hover{
+  transform:scale(1.02);
+}
+
+
+/* =========================
+   LIGHTBOX
+   ========================= */
+
+.lightbox{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,.95);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:99999;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:opacity .3s;
+}
+
+.lightbox.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.lightbox img{
+  max-width:95%;
+  max-height:90%;
+
+  border-radius:10px;
+
+  transform-origin:center;
+
+  transition:transform .2s ease;
+}
+
+.close{
+  position:absolute;
+
+  top:20px;
+  left:20px;
+
+  color:white;
+
+  font-size:28px;
+
+  cursor:pointer;
+}
+
+body.lightbox-open{
+  overflow:hidden;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:600px){
+
+  .title{
+    font-size:25px;
+    padding:12px 25px;
+  }
+
+  .gallery-grid{
+    grid-template-columns:
+      repeat(auto-fill,minmax(110px,1fr));
+  }
+
+  .gallery-grid img{
+    height:110px;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     LOGIN
+     ========================= -->
+
+<div id="login" class="login">
+
+  <div class="login-box">
+
+    <h1>🔒 Personal</h1>
+
+    <p>
+      Esta galería es privada
+    </p>
+
+    <input
+      id="password"
+      class="password"
+      type="password"
+      placeholder="Contraseña"
+    >
+
+    <button
+      class="enter"
+      onclick="login()">
+      Entrar
+    </button>
+
+    <div id="error" class="error">
+      Contraseña incorrecta
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     PERSONAL HOME
+     ========================= -->
+
+<div id="personal">
+
+  <div class="header">
+
+    <div class="title">
+      Personal Gallery
+    </div>
+
+    <div class="subtitle">
+      Fotografías personales
+    </div>
+
+  </div>
+
+
+  <div class="sections">
+
+    <div class="cards">
+
+      <!-- VIAJE -->
+
+      <div
+        class="card"
+        onclick="openGallery('viaje')">
+
+        <div
+          id="viajeCover"
+          class="card-image">
+        </div>
+
+        <div class="card-content">
+
+          <h2>📸 Viaje</h2>
+
+          <p>
+            Fotografías de viaje
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- EMILIO -->
+
+      <div
+        class="card"
+        onclick="openGallery('emilio')">
+
+        <div
+          id="emilioCover"
+          class="card-image">
+        </div>
+
+        <div class="card-content">
+
+          <h2>👦 Emilio</h2>
+
+          <p>
+            Fotografías personales
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     GALLERY PAGE
+     ========================= -->
+
+<div id="galleryPage" class="gallery-page">
+
+  <div class="gallery-header">
+
+    <button
+      class="back"
+      onclick="backHome()">
+      ← Volver
+    </button>
+
+    <h1
+      id="galleryTitle"
+      class="gallery-title">
+    </h1>
+
+  </div>
+
+  <div
+    id="galleryGrid"
+    class="gallery-grid">
+  </div>
+
+</div>
+
+
+<!-- =========================
+     LIGHTBOX
+     ========================= -->
+
+<div
+  id="lightbox"
+  class="lightbox">
+
+  <div
+    class="close"
+    onclick="closeLightbox()">
+    ×
+  </div>
+
+  <img
+    id="lightboxImg">
+    
+</div>
+
+
+<script>
+
+/* =========================
+   CONFIGURATION
+   ========================= */
+
+const cloud="du4pmuch7";
+
+const API="https://wp-aofm-cdmx.vercel.app/api/images";
+
+
+/*
+   TEMPORARY PASSWORD
+
+   Cambia esta contraseña por la que quieras.
+*/
+
+const PASSWORD="Personal-Zagreb-2026";
+
+
+/* =========================
+   LOGIN
+   ========================= */
+
+function login(){
+
+  const entered=
+    document.getElementById("password").value;
+
+  const error=
+    document.getElementById("error");
+
+
+  if(entered===PASSWORD){
+
+    sessionStorage.setItem(
+      "personalAccess",
+      "true"
+    );
+
+    document.getElementById("login")
+      .style.display="none";
+
+    document.getElementById("personal")
+      .style.display="block";
+
+    loadCovers();
+
+  }else{
+
+    error.style.display="block";
+
+  }
+
+}
+
+
+/* Allow Enter key */
+
+document
+  .getElementById("password")
+  .addEventListener("keydown",function(e){
+
+    if(e.key==="Enter"){
+      login();
+    }
+
+  });
+
+
+/* =========================
+   CHECK ACCESS
+   ========================= */
+
+window.onload=function(){
+
+  if(
+    sessionStorage.getItem(
+      "personalAccess"
+    )==="true"
+  ){
+
+    document.getElementById("login")
+      .style.display="none";
+
+    document.getElementById("personal")
+      .style.display="block";
+
+    loadCovers();
+
+  }
+
+};
+
+
+/* =========================
+   LOAD COVERS
+   ========================= */
+
+async function loadCovers(){
+
+  try{
+
+    const viaje=
+      await getImages("ENEOE/Viaje");
+
+    const emilio=
+      await getImages("ENEOE/Emilio");
+
+
+    if(viaje.length){
+
+      document.getElementById(
+        "viajeCover"
+      ).style.backgroundImage=
+        `url(https://res.cloudinary.com/${cloud}/image/upload/w_800/${viaje[0]}.jpg)`;
+
+    }
+
+
+    if(emilio.length){
+
+      document.getElementById(
+        "emilioCover"
+      ).style.backgroundImage=
+        `url(https://res.cloudinary.com/${cloud}/image/upload/w_800/${emilio[0]}.jpg)`;
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Error loading covers:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+   GET IMAGES
+   ========================= */
+
+async function getImages(folder){
+
+  const res=
+    await fetch(
+      `${API}?folder=${encodeURIComponent(folder)}`
+    );
+
+  if(!res.ok){
+
+    throw new Error(
+      "API error"
+    );
+
+  }
+
+  const images=
+    await res.json();
+
+  return images;
+
+}
+
+
+/* =========================
+   OPEN GALLERY
+   ========================= */
+
+async function openGallery(type){
+
+  const folder=
+    type==="viaje"
+      ? "ENEOE/Viaje"
+      : "ENEOE/Emilio";
+
+
+  const title=
+    type==="viaje"
+      ? "📸 Fotos de Viaje"
+      : "👦 Fotos de Emilio";
+
+
+  document.getElementById(
+    "personal"
+  ).style.display="none";
+
+
+  document.getElementById(
+    "galleryPage"
+  ).style.display="block";
+
+
+  document.getElementById(
+    "galleryTitle"
+  ).innerText=title;
+
+
+  const grid=
+    document.getElementById(
+      "galleryGrid"
+    );
+
+
+  grid.innerHTML="Cargando fotografías...";
+
+
+  try{
+
+    const images=
+      await getImages(folder);
+
+
+    grid.innerHTML="";
+
+
+    images.forEach((id,index)=>{
+
+      const img=
+        new Image();
+
+      img.src=
+        `https://res.cloudinary.com/${cloud}/image/upload/w_500/${id}.jpg`;
+
+      img.loading="lazy";
+
+      img.onclick=()=>{
+        openLightbox(images,index);
+      };
+
+      grid.appendChild(img);
+
+    });
+
+
+  }catch(error){
+
+    grid.innerHTML=
+      "No fue posible cargar las fotografías.";
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================
+   BACK
+   ========================= */
+
+function backHome(){
+
+  document.getElementById(
+    "galleryPage"
+  ).style.display="none";
+
+
+  document.getElementById(
+    "personal"
+  ).style.display="block";
+
+}
+
+
+/* =========================
+   LIGHTBOX
+   ========================= */
+
+const lightbox=
+  document.getElementById(
+    "lightbox"
+  );
+
+const lightboxImg=
+  document.getElementById(
+    "lightboxImg"
+  );
+
+
+let currentImages=[];
+let currentIndex=0;
+
+
+function openLightbox(images,index){
+
+  currentImages=images;
+
+  currentIndex=index;
+
+  showImage();
+
+  lightbox.classList.add(
+    "active"
+  );
+
+  document.body.classList.add(
+    "lightbox-open"
+  );
+
+}
+
+
+function showImage(){
+
+  const id=
+    currentImages[currentIndex];
+
+
+  lightboxImg.src=
+    `https://res.cloudinary.com/${cloud}/image/upload/${id}.jpg`;
+
+}
+
+
+function closeLightbox(){
+
+  lightbox.classList.remove(
+    "active"
+  );
+
+  document.body.classList.remove(
+    "lightbox-open"
+  );
+
+}
+
+
+function next(){
+
+  currentIndex=
+    (currentIndex+1)
+    %currentImages.length;
+
+  showImage();
+
+}
+
+
+function prev(){
+
+  currentIndex=
+    (currentIndex-1+
+     currentImages.length)
+    %currentImages.length;
+
+  showImage();
+
+}
+
+
+/* Keyboard navigation */
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      !lightbox.classList.contains(
+        "active"
+      )
+    ){
+      return;
+    }
+
+
+    if(e.key==="ArrowRight"){
+      next();
+    }
+
+
+    if(e.key==="ArrowLeft"){
+      prev();
+    }
+
+
+    if(e.key==="Escape"){
+      closeLightbox();
+    }
+
+  }
+);
+
+
+/* Close clicking background */
+
+lightbox.onclick=function(e){
+
+  if(e.target===lightbox){
+
+    closeLightbox();
+
+  }
+
+};
+
+</script>
+
+</body>
+</html>
