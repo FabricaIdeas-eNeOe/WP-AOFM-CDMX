@@ -512,18 +512,32 @@ body.lightbox-open{
      ========================= -->
 
 <div
-  id="lightbox"
-  class="lightbox">
+    id="lightbox"
+    class="lightbox">
 
-  <div
-    class="close"
-    onclick="closeLightbox()">
-    ×
-  </div>
+    <div
+        class="close"
+        onclick="closeLightbox()">
+        ×
+    </div>
 
-  <img
-    id="lightboxImg">
-    
+    <button
+        class="lightbox-prev"
+        onclick="prev()"
+        aria-label="Fotografía anterior">
+        ‹
+    </button>
+
+    <img
+        id="lightboxImg">
+
+    <button
+        class="lightbox-next"
+        onclick="next()"
+        aria-label="Fotografía siguiente">
+        ›
+    </button>
+
 </div>
 
 
