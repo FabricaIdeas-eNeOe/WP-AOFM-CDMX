@@ -108,7 +108,7 @@ body{
    ========================= */
 
 #personal{
-  display:none;
+  display:block;
 }
 
 .header{
@@ -471,42 +471,6 @@ body.lightbox-open{
 
 
 <!-- =========================
-     LOGIN
-     ========================= -->
-
-<div id="login" class="login">
-
-  <div class="login-box">
-
-    <h1>🔒 Personal</h1>
-
-    <p>
-      Esta galería es privada
-    </p>
-
-    <input
-      id="password"
-      class="password"
-      type="password"
-      placeholder="Contraseña"
-    >
-
-    <button
-      class="enter"
-      onclick="login()">
-      Entrar
-    </button>
-
-    <div id="error" class="error">
-      Contraseña incorrecta
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
      PERSONAL HOME
      ========================= -->
 
@@ -655,90 +619,36 @@ body.lightbox-open{
 
 const cloud="du4pmuch7";
 
-const API="https://wp-aofm-cdmx.vercel.app/api/images";
+const API="/api/images";
 
+
+/* =========================
+   AUTHENTICATED ENTRY
+   ========================= */
 
 /*
-   TEMPORARY PASSWORD
+   personal.html is already protected
+   by Vercel middleware.
 
-   Conservada exactamente de la versión actual.
+   If this page is being displayed,
+   the personal session cookie has already
+   been accepted by the server.
+
+   Therefore we load the private gallery
+   directly. No password or sessionStorage
+   is used here.
 */
 
-const PASSWORD="Personal-Zagreb-2026";
+window.addEventListener("DOMContentLoaded",function(){
+
+  loadCovers();
+
+});
 
 
 /* =========================
-   LOGIN
+   LOAD COVERS
    ========================= */
-
-function login(){
-
-  const entered =
-    document.getElementById("password").value;
-
-  const error =
-    document.getElementById("error");
-
-  if(entered === PASSWORD){
-
-    sessionStorage.setItem(
-      "personalAccess",
-      "true"
-    );
-
-    document.getElementById("login")
-      .style.display="none";
-
-    document.getElementById("personal")
-      .style.display="block";
-
-    loadCovers();
-
-  }else{
-
-    error.style.display="block";
-
-  }
-
-}
-
-
-/* Allow Enter key */
-
-document
-  .getElementById("password")
-  .addEventListener("keydown",function(e){
-
-    if(e.key === "Enter"){
-      login();
-    }
-
-  });
-
-
-/* =========================
-   CHECK ACCESS
-   ========================= */
-
-window.onload=function(){
-
-  if(
-    sessionStorage.getItem(
-      "personalAccess"
-    ) === "true"
-  ){
-
-    document.getElementById("login")
-      .style.display="none";
-
-    document.getElementById("personal")
-      .style.display="block";
-
-    loadCovers();
-
-  }
-
-};
 
 
 /* =========================
