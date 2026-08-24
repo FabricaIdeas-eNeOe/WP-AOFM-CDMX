@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<title>Personal · Waterpolo Photography CDMX</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+
+  font-family:'Montserrat',sans-serif;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,0.25),
+      rgba(255,255,255,0.15)
+    ),
+    url('background.png');
+
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+
+  color:#0a4f73;
+}
+
+.login{
+  min-height:100vh;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:30px;
+}
+
+.login-box{
+  width:min(430px,100%);
+
+  padding:45px 35px;
+
+  text-align:center;
+
+  background:rgba(255,255,255,0.45);
+
+  border:1px solid rgba(255,255,255,0.6);
+
+  border-radius:30px;
+
+  backdrop-filter:blur(15px);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.12);
+}
+
+.login-box h1{
+  margin:0 0 10px;
+
+  font-size:32px;
+  font-weight:800;
+}
+
+.login-box p{
+  margin:0 0 25px;
+
+  color:#456;
+}
+
+.password{
+  width:100%;
+
+  padding:14px 18px;
+
+  border:none;
+  border-radius:20px;
+
+  background:rgba(255,255,255,0.8);
+
+  font-family:'Montserrat',sans-serif;
+
+  font-size:16px;
+
+  outline:none;
+}
+
+.enter{
+  margin-top:15px;
+
+  padding:12px 28px;
+
+  border:none;
+  border-radius:20px;
+
+  background:#0a4f73;
+
+  color:white;
+
+  font-family:'Montserrat',sans-serif;
+
+  font-weight:600;
+
+  cursor:pointer;
+}
+
+.enter:hover{
+  opacity:.9;
+}
+
+.error{
+  margin-top:15px;
+
+  color:#b00020;
+
+  font-size:14px;
+
+  display:none;
+}
+
+.loading{
+  margin-top:15px;
+
+  color:#52758a;
+
+  font-size:14px;
+
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login">
+
+  <div class="login-box">
+
+    <h1>🔒 Personal</h1>
+
+    <p>
+      Esta galería es privada
+    </p>
+
+    <input
+      id="password"
+      class="password"
+      type="password"
+      placeholder="Contraseña"
+      autocomplete="current-password"
+    >
+
+    <button
+      id="enter"
+      class="enter"
+      onclick="login()">
+      Entrar
+    </button>
+
+    <div id="loading" class="loading">
+      Verificando...
+    </div>
+
+    <div id="error" class="error">
+      Contraseña incorrecta
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+async function login(){
+
+  const password =
+    document.getElementById("password").value;
+
+  const error =
+    document.getElementById("error");
+
+  const loading =
+    document.getElementById("loading");
+
+  const button =
+    document.getElementById("enter");
+
+
+  error.style.display="none";
+
+
+  if(!password){
+
+    error.innerText="Introduce la contraseña.";
+    error.style.display="block";
+
+    return;
+  }
+
+
+  button.disabled=true;
+  loading.style.display="block";
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/personal-login",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          credentials:"same-origin",
+
+          body:JSON.stringify({
+            password:password
+          })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok || !data.ok){
+
+      throw new Error(
+        data.error ||
+        "Invalid password."
+      );
+
+    }
+
+
+    /*
+     * La API acaba de crear
+     * la cookie HttpOnly.
+     *
+     * Ahora vamos directamente
+     * a la galería protegida.
+     */
+
+    window.location.href =
+      "/personal.html";
+
+
+  }catch(err){
+
+    error.innerText =
+      "Contraseña incorrecta";
+
+    error.style.display="block";
+
+    button.disabled=false;
+    loading.style.display="none";
+
+  }
+
+}
+
+
+/* ENTER */
+
+document
+  .getElementById("password")
+  .addEventListener(
+    "keydown",
+    function(e){
+
+      if(e.key==="Enter"){
+        login();
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
