@@ -170,7 +170,7 @@ export default async function handler(req, res) {
     `${COOKIE_NAME}=${encodeURIComponent(session)}`,
     "HttpOnly",
     "SameSite=Strict",
-    "Path=/api",
+    "Path=/",
     `Max-Age=${SESSION_SECONDS}`
   ];
 
