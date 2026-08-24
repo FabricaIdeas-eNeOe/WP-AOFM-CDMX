@@ -1,7 +1,4 @@
-import crypto from "crypto";
-
 const COOKIE_NAME = "personal_session";
-const SESSION_SECONDS = 60 * 60 * 12;
 
 function getCookie(request, name) {
   const header = request.headers.get("cookie") || "";
@@ -19,37 +16,100 @@ function getCookie(request, name) {
   return null;
 }
 
-function verifySession(token, secret) {
-  if (!token || !secret) return false;
+function base64UrlToBytes(value) {
+  const base64 =
+    value
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .padEnd(
+        value.length + (4 - (value.length % 4)) % 4,
+        "="
+      );
 
-  const parts = token.split(".");
+  const binary = atob(base64);
 
-  if (parts.length !== 2) return false;
+  const bytes = new Uint8Array(binary.length);
 
-  const [expires, signature] = parts;
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
 
-  if (!/^\d+$/.test(expires)) return false;
+  return bytes;
+}
 
-  const expiration = Number(expires);
+async function verifySession(token, secret) {
 
-  if (expiration < Math.floor(Date.now() / 1000)) {
+  if (!token || !secret) {
     return false;
   }
 
-  const expected = crypto
-    .createHmac("sha256", secret)
-    .update(expires)
-    .digest("base64url");
+  const parts = token.split(".");
 
-  const a = Buffer.from(signature);
-  const b = Buffer.from(expected);
+  if (parts.length !== 2) {
+    return false;
+  }
 
-  if (a.length !== b.length) return false;
+  const [expires, signature] = parts;
 
-  return crypto.timingSafeEqual(a, b);
+  if (!/^\d+$/.test(expires)) {
+    return false;
+  }
+
+  const expiration = Number(expires);
+
+  if (
+    !Number.isFinite(expiration) ||
+    expiration < Math.floor(Date.now() / 1000)
+  ) {
+    return false;
+  }
+
+  try {
+
+    const key = await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(secret),
+      {
+        name: "HMAC",
+        hash: "SHA-256"
+      },
+      false,
+      ["sign"]
+    );
+
+    const expectedBuffer =
+      await crypto.subtle.sign(
+        "HMAC",
+        key,
+        new TextEncoder().encode(expires)
+      );
+
+    const expected =
+      new Uint8Array(expectedBuffer);
+
+    const received =
+      base64UrlToBytes(signature);
+
+    if (expected.length !== received.length) {
+      return false;
+    }
+
+    let difference = 0;
+
+    for (let i = 0; i < expected.length; i++) {
+      difference |= expected[i] ^ received[i];
+    }
+
+    return difference === 0;
+
+  } catch (error) {
+
+    return false;
+
+  }
 }
 
-export default function middleware(request) {
+export default async function middleware(request) {
 
   const pathname =
     new URL(request.url).pathname;
@@ -62,20 +122,37 @@ export default function middleware(request) {
     return;
   }
 
+  /*
+   * SESSION SECRET
+   */
+
   const secret =
     process.env.PERSONAL_SESSION_SECRET;
+
+  /*
+   * SESSION COOKIE
+   */
 
   const token =
     getCookie(request, COOKIE_NAME);
 
+  /*
+   * VALIDATE SESSION
+   */
+
   const valid =
-    verifySession(token, secret);
+    await verifySession(
+      token,
+      secret
+    );
 
   /*
-   * NO SESSION = HIDE PAGE COMPLETELY
+   * NO VALID SESSION
+   * HIDE PAGE COMPLETELY
    */
 
   if (!valid) {
+
     return new Response("Not Found", {
       status: 404,
       headers: {
@@ -83,6 +160,7 @@ export default function middleware(request) {
         "Cache-Control": "no-store"
       }
     });
+
   }
 
   /*
