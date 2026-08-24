@@ -301,6 +301,10 @@ body{
   pointer-events:none;
 
   transition:opacity .3s;
+
+  /* IMPORTANT FOR MOBILE GESTURES */
+  touch-action:none;
+  overscroll-behavior:none;
 }
 
 .lightbox.active{
@@ -316,7 +320,14 @@ body{
 
   transform-origin:center;
 
-  transition:transform .2s ease;
+  transition:transform .15s ease;
+
+  /* IMPORTANT FOR MOBILE GESTURES */
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-user-drag:none;
 }
 
 .close{
@@ -328,9 +339,75 @@ body{
   color:white;
 
   font-size:28px;
+  line-height:1;
 
   cursor:pointer;
+  user-select:none;
+
+  z-index:10;
+
+  width:44px;
+  height:44px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
 }
+
+.lightbox-prev,
+.lightbox-next{
+  position:absolute;
+
+  top:50%;
+  transform:translateY(-50%);
+
+  width:48px;
+  height:72px;
+
+  border:0;
+  border-radius:16px;
+
+  background:rgba(255,255,255,.14);
+  color:white;
+
+  font-size:52px;
+  line-height:1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+  user-select:none;
+
+  z-index:10;
+
+  padding:0;
+
+  backdrop-filter:blur(6px);
+}
+
+.lightbox-prev{
+  left:18px;
+}
+
+.lightbox-next{
+  right:18px;
+}
+
+.lightbox-prev:active,
+.lightbox-next:active,
+.close:active{
+  background:rgba(255,255,255,.28);
+}
+
+
+/* =========================
+   BODY LOCK
+   ========================= */
 
 body.lightbox-open{
   overflow:hidden;
@@ -355,6 +432,34 @@ body.lightbox-open{
 
   .gallery-grid img{
     height:110px;
+  }
+
+  .lightbox img{
+    max-width:88%;
+    max-height:82%;
+  }
+
+  .lightbox-prev,
+  .lightbox-next{
+    width:42px;
+    height:58px;
+
+    font-size:42px;
+
+    border-radius:14px;
+  }
+
+  .lightbox-prev{
+    left:8px;
+  }
+
+  .lightbox-next{
+    right:8px;
+  }
+
+  .close{
+    top:12px;
+    left:12px;
   }
 
 }
@@ -512,31 +617,32 @@ body.lightbox-open{
      ========================= -->
 
 <div
-    id="lightbox"
-    class="lightbox">
+  id="lightbox"
+  class="lightbox">
 
-    <div
-        class="close"
-        onclick="closeLightbox()">
-        ×
-    </div>
+  <div
+    class="close"
+    onclick="closeLightbox()">
+    ×
+  </div>
 
-    <button
-        class="lightbox-prev"
-        onclick="prev()"
-        aria-label="Fotografía anterior">
-        ‹
-    </button>
+  <button
+    class="lightbox-prev"
+    onclick="prev()"
+    aria-label="Fotografía anterior">
+    ‹
+  </button>
 
-    <img
-        id="lightboxImg">
+  <img
+    id="lightboxImg"
+    draggable="false">
 
-    <button
-        class="lightbox-next"
-        onclick="next()"
-        aria-label="Fotografía siguiente">
-        ›
-    </button>
+  <button
+    class="lightbox-next"
+    onclick="next()"
+    aria-label="Fotografía siguiente">
+    ›
+  </button>
 
 </div>
 
@@ -555,7 +661,7 @@ const API="https://wp-aofm-cdmx.vercel.app/api/images";
 /*
    TEMPORARY PASSWORD
 
-   Cambia esta contraseña por la que quieras.
+   Conservada exactamente de la versión actual.
 */
 
 const PASSWORD="Personal-Zagreb-2026";
@@ -567,14 +673,13 @@ const PASSWORD="Personal-Zagreb-2026";
 
 function login(){
 
-  const entered=
+  const entered =
     document.getElementById("password").value;
 
-  const error=
+  const error =
     document.getElementById("error");
 
-
-  if(entered===PASSWORD){
+  if(entered === PASSWORD){
 
     sessionStorage.setItem(
       "personalAccess",
@@ -604,7 +709,7 @@ document
   .getElementById("password")
   .addEventListener("keydown",function(e){
 
-    if(e.key==="Enter"){
+    if(e.key === "Enter"){
       login();
     }
 
@@ -620,7 +725,7 @@ window.onload=function(){
   if(
     sessionStorage.getItem(
       "personalAccess"
-    )==="true"
+    ) === "true"
   ){
 
     document.getElementById("login")
@@ -644,10 +749,10 @@ async function loadCovers(){
 
   try{
 
-    const viaje=
+    const viaje =
       await getImages("ENEOE/Viaje");
 
-    const emilio=
+    const emilio =
       await getImages("ENEOE/Emilio");
 
 
@@ -655,7 +760,7 @@ async function loadCovers(){
 
       document.getElementById(
         "viajeCover"
-      ).style.backgroundImage=
+      ).style.backgroundImage =
         `url(https://res.cloudinary.com/${cloud}/image/upload/w_800/${viaje[0]}.jpg)`;
 
     }
@@ -665,7 +770,7 @@ async function loadCovers(){
 
       document.getElementById(
         "emilioCover"
-      ).style.backgroundImage=
+      ).style.backgroundImage =
         `url(https://res.cloudinary.com/${cloud}/image/upload/w_800/${emilio[0]}.jpg)`;
 
     }
@@ -688,7 +793,7 @@ async function loadCovers(){
 
 async function getImages(folder){
 
-  const res=
+  const res =
     await fetch(
       `${API}?folder=${encodeURIComponent(folder)}`
     );
@@ -701,7 +806,7 @@ async function getImages(folder){
 
   }
 
-  const images=
+  const images =
     await res.json();
 
   return images;
@@ -715,14 +820,14 @@ async function getImages(folder){
 
 async function openGallery(type){
 
-  const folder=
-    type==="viaje"
+  const folder =
+    type === "viaje"
       ? "ENEOE/Viaje"
       : "ENEOE/Emilio";
 
 
-  const title=
-    type==="viaje"
+  const title =
+    type === "viaje"
       ? "📸 Fotos de Viaje"
       : "👦 Fotos de Emilio";
 
@@ -742,18 +847,19 @@ async function openGallery(type){
   ).innerText=title;
 
 
-  const grid=
+  const grid =
     document.getElementById(
       "galleryGrid"
     );
 
 
-  grid.innerHTML="Cargando fotografías...";
+  grid.innerHTML =
+    "Cargando fotografías...";
 
 
   try{
 
-    const images=
+    const images =
       await getImages(folder);
 
 
@@ -762,10 +868,10 @@ async function openGallery(type){
 
     images.forEach((id,index)=>{
 
-      const img=
+      const img =
         new Image();
 
-      img.src=
+      img.src =
         `https://res.cloudinary.com/${cloud}/image/upload/w_500/${id}.jpg`;
 
       img.loading="lazy";
@@ -781,7 +887,7 @@ async function openGallery(type){
 
   }catch(error){
 
-    grid.innerHTML=
+    grid.innerHTML =
       "No fue posible cargar las fotografías.";
 
     console.error(error);
@@ -813,12 +919,12 @@ function backHome(){
    LIGHTBOX
    ========================= */
 
-const lightbox=
+const lightbox =
   document.getElementById(
     "lightbox"
   );
 
-const lightboxImg=
+const lightboxImg =
   document.getElementById(
     "lightboxImg"
   );
@@ -828,17 +934,43 @@ let currentImages=[];
 let currentIndex=0;
 
 
+/* =========================
+   ZOOM / TOUCH STATE
+   ========================= */
+
+let scale=1;
+
+let posX=0;
+let posY=0;
+
+let touchStartX=0;
+let touchStartY=0;
+
+let lastTouchX=0;
+let lastTouchY=0;
+
+let pinchStartDistance=0;
+let pinchStartScale=1;
+
+let isPinching=false;
+let isDragging=false;
+
+let lastTapTime=0;
+
+
+/* =========================
+   OPEN LIGHTBOX
+   ========================= */
+
 function openLightbox(images,index){
 
   currentImages=images;
-
   currentIndex=index;
 
+  resetZoom();
   showImage();
 
-  lightbox.classList.add(
-    "active"
-  );
+  lightbox.classList.add("active");
 
   document.body.classList.add(
     "lightbox-open"
@@ -847,17 +979,42 @@ function openLightbox(images,index){
 }
 
 
+/* =========================
+   SHOW IMAGE
+   ========================= */
+
 function showImage(){
 
-  const id=
+  if(
+    !currentImages ||
+    !currentImages.length
+  ){
+    return;
+  }
+
+  const id =
     currentImages[currentIndex];
 
-
-  lightboxImg.src=
+  const url =
     `https://res.cloudinary.com/${cloud}/image/upload/${id}.jpg`;
+
+  lightboxImg.src=url;
+
+
+  /* PRELOAD NEXT */
+
+  const nextImage =
+    new Image();
+
+  nextImage.src =
+    `https://res.cloudinary.com/${cloud}/image/upload/${currentImages[(currentIndex+1)%currentImages.length]}.jpg`;
 
 }
 
+
+/* =========================
+   CLOSE LIGHTBOX
+   ========================= */
 
 function closeLightbox(){
 
@@ -869,15 +1026,29 @@ function closeLightbox(){
     "lightbox-open"
   );
 
+  resetZoom();
+
 }
 
 
+/* =========================
+   NAVIGATION
+   ========================= */
+
 function next(){
 
-  currentIndex=
-    (currentIndex+1)
-    %currentImages.length;
+  if(
+    !currentImages ||
+    !currentImages.length
+  ){
+    return;
+  }
 
+  currentIndex =
+    (currentIndex + 1)
+    % currentImages.length;
+
+  resetZoom();
   showImage();
 
 }
@@ -885,17 +1056,336 @@ function next(){
 
 function prev(){
 
-  currentIndex=
-    (currentIndex-1+
-     currentImages.length)
-    %currentImages.length;
+  if(
+    !currentImages ||
+    !currentImages.length
+  ){
+    return;
+  }
 
+  currentIndex =
+    (currentIndex - 1 +
+     currentImages.length)
+    % currentImages.length;
+
+  resetZoom();
   showImage();
 
 }
 
 
-/* Keyboard navigation */
+/* =========================
+   PINCH DISTANCE
+   ========================= */
+
+function getPinchDistance(touches){
+
+  const dx =
+    touches[0].clientX -
+    touches[1].clientX;
+
+  const dy =
+    touches[0].clientY -
+    touches[1].clientY;
+
+  return Math.sqrt(
+    dx * dx +
+    dy * dy
+  );
+
+}
+
+
+/* =========================
+   TOUCH START
+   ========================= */
+
+lightbox.addEventListener(
+  "touchstart",
+  function(e){
+
+    if(!lightbox.classList.contains("active")){
+      return;
+    }
+
+
+    /* TWO FINGERS = PINCH */
+
+    if(e.touches.length === 2){
+
+      isPinching=true;
+      isDragging=false;
+
+      pinchStartDistance =
+        getPinchDistance(
+          e.touches
+        );
+
+      pinchStartScale=scale;
+
+      return;
+
+    }
+
+
+    /* ONE FINGER */
+
+    if(e.touches.length !== 1){
+      return;
+    }
+
+    touchStartX =
+      e.touches[0].clientX;
+
+    touchStartY =
+      e.touches[0].clientY;
+
+    lastTouchX=touchStartX;
+    lastTouchY=touchStartY;
+
+    isDragging=false;
+
+  },
+  {passive:false}
+);
+
+
+/* =========================
+   TOUCH MOVE
+   ========================= */
+
+lightbox.addEventListener(
+  "touchmove",
+  function(e){
+
+    /* PINCH */
+
+    if(
+      e.touches.length === 2 &&
+      pinchStartDistance > 0
+    ){
+
+      e.preventDefault();
+
+      const distance =
+        getPinchDistance(
+          e.touches
+        );
+
+      scale =
+        pinchStartScale *
+        (distance / pinchStartDistance);
+
+      scale =
+        Math.min(
+          4,
+          Math.max(
+            1,
+            scale
+          )
+        );
+
+      applyTransform();
+
+      return;
+
+    }
+
+
+    /* DRAG ONLY WHEN ZOOMED */
+
+    if(
+      e.touches.length === 1 &&
+      scale > 1
+    ){
+
+      e.preventDefault();
+
+      const x =
+        e.touches[0].clientX;
+
+      const y =
+        e.touches[0].clientY;
+
+      posX +=
+        x - lastTouchX;
+
+      posY +=
+        y - lastTouchY;
+
+      lastTouchX=x;
+      lastTouchY=y;
+
+      isDragging=true;
+
+      applyTransform();
+
+    }
+
+  },
+  {passive:false}
+);
+
+
+/* =========================
+   TOUCH END
+   ========================= */
+
+lightbox.addEventListener(
+  "touchend",
+  function(e){
+
+    /* END OF PINCH */
+
+    if(isPinching){
+
+      if(e.touches.length === 0){
+
+        isPinching=false;
+        pinchStartDistance=0;
+
+      }
+
+      return;
+
+    }
+
+
+    if(e.changedTouches.length !== 1){
+      return;
+    }
+
+
+    const endX =
+      e.changedTouches[0].clientX;
+
+    const endY =
+      e.changedTouches[0].clientY;
+
+
+    const deltaX =
+      endX - touchStartX;
+
+    const deltaY =
+      endY - touchStartY;
+
+
+    const distance =
+      Math.sqrt(
+        deltaX * deltaX +
+        deltaY * deltaY
+      );
+
+
+    /* =====================
+       SWIPE
+       ===================== */
+
+    if(
+      scale === 1 &&
+      !isDragging &&
+      Math.abs(deltaX) >= 60 &&
+      Math.abs(deltaX) >
+        Math.abs(deltaY)
+    ){
+
+      if(deltaX < 0){
+
+        next();
+
+      }else{
+
+        prev();
+
+      }
+
+      lastTapTime=0;
+
+      return;
+
+    }
+
+
+    /* =====================
+       TAP / DOUBLE TAP
+       ===================== */
+
+    if(
+      !isDragging &&
+      distance < 20
+    ){
+
+      const now =
+        Date.now();
+
+      if(
+        now - lastTapTime <
+        350
+      ){
+
+        if(scale === 1){
+
+          scale=2;
+
+        }else{
+
+          resetZoom();
+
+        }
+
+        applyTransform();
+
+        lastTapTime=0;
+
+        return;
+
+      }
+
+      lastTapTime=now;
+
+    }
+
+  },
+  {passive:false}
+);
+
+
+/* =========================
+   TRANSFORM
+   ========================= */
+
+function applyTransform(){
+
+  lightboxImg.style.transform =
+    `translate(${posX}px, ${posY}px) scale(${scale})`;
+
+}
+
+
+/* =========================
+   RESET ZOOM
+   ========================= */
+
+function resetZoom(){
+
+  scale=1;
+
+  posX=0;
+  posY=0;
+
+  isDragging=false;
+  isPinching=false;
+
+  pinchStartDistance=0;
+
+  applyTransform();
+
+}
+
+
+/* =========================
+   KEYBOARD
+   ========================= */
 
 document.addEventListener(
   "keydown",
@@ -910,17 +1400,17 @@ document.addEventListener(
     }
 
 
-    if(e.key==="ArrowRight"){
+    if(e.key === "ArrowRight"){
       next();
     }
 
 
-    if(e.key==="ArrowLeft"){
+    if(e.key === "ArrowLeft"){
       prev();
     }
 
 
-    if(e.key==="Escape"){
+    if(e.key === "Escape"){
       closeLightbox();
     }
 
@@ -928,17 +1418,22 @@ document.addEventListener(
 );
 
 
-/* Close clicking background */
+/* =========================
+   CLOSE BY BACKGROUND
+   ========================= */
 
-lightbox.onclick=function(e){
+lightbox.addEventListener(
+  "click",
+  function(e){
 
-  if(e.target===lightbox){
+    if(e.target === lightbox){
 
-    closeLightbox();
+      closeLightbox();
+
+    }
 
   }
-
-};
+);
 
 </script>
 
