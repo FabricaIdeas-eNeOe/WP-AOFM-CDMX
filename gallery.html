@@ -170,6 +170,7 @@ const category=params.get("cat");
 
 const customFolder=params.get("folder");
 const customTitle=params.get("title");
+const customCover=params.get("cover");
 
 if(!category && !customFolder){
   document.body.innerHTML="";
@@ -243,8 +244,13 @@ function buildCustomGallery(){
     const cover=document.createElement("div");
     cover.className="cover";
 
+    const coverImage=
+      customCover && ALL.includes(customCover)
+        ? customCover
+        : match.images[0];
+
     cover.style.backgroundImage=
-      `url(https://res.cloudinary.com/${cloud}/image/upload/w_800/${match.images[0]}.jpg)`;
+      `url(https://res.cloudinary.com/${cloud}/image/upload/w_800/${coverImage}.jpg)`;
 
     cover.innerHTML=`<span>${customTitle || "Gallery"}</span>`;
 
