@@ -168,20 +168,35 @@ const params=new URLSearchParams(window.location.search);
 const tournament=params.get("t") || "CN2026";
 const category=params.get("cat");
 
-if(!category){
+const customFolder=params.get("folder");
+const customTitle=params.get("title");
+
+if(!category && !customFolder){
   document.body.innerHTML="";
   throw new Error("Blocked");
 }
 
-let pageTitle=category.toUpperCase();
+let pageTitle;
 
-if(tournament==="WORLD2026" && category.toLowerCase()==="u16"){
-  pageTitle="World Aquatics Men’s U16 Water Polo Championships 2026. Zagreb, CRO";
+if(customTitle){
+
+  pageTitle=customTitle;
+
+}else{
+
+  pageTitle=category.toUpperCase();
+
+  if(tournament==="WORLD2026" && category.toLowerCase()==="u16"){
+    pageTitle="World Aquatics Men’s U16 Water Polo Championships 2026. Zagreb, CRO";
+  }
+
 }
 
 document.getElementById("title").innerText=pageTitle;
 
-const API=`https://wp-aofm-cdmx.vercel.app/api/images?folder=WP2026/${tournament}/${category}/gallery`;
+const API=customFolder
+  ? `https://wp-aofm-cdmx.vercel.app/api/images?folder=${encodeURIComponent(customFolder)}`
+  : `https://wp-aofm-cdmx.vercel.app/api/images?folder=WP2026/${tournament}/${category}/gallery`;
 
 let ALL=[];
 let currentRival="";
@@ -192,7 +207,70 @@ let currentIndex=0;
 async function load(){
   const res=await fetch(API);
   ALL=await res.json();
-  buildFilters();
+
+  if(customFolder){
+    buildCustomGallery();
+  }else{
+    buildFilters();
+  }
+}
+
+function buildCustomGallery(){
+
+  const f=document.getElementById("filters");
+
+  f.innerHTML="";
+
+  if(!ALL.length){
+    document.getElementById("gallery").innerHTML="";
+    return;
+  }
+
+  matches=[{
+    date:"",
+    images:ALL
+  }];
+
+  const container=document.getElementById("gallery");
+
+  container.innerHTML="";
+
+  matches.forEach(match=>{
+
+    const section=document.createElement("div");
+    section.className="match";
+
+    const cover=document.createElement("div");
+    cover.className="cover";
+
+    cover.style.backgroundImage=
+      `url(https://res.cloudinary.com/${cloud}/image/upload/w_800/${match.images[0]}.jpg)`;
+
+    cover.innerHTML=`<span>${customTitle || "Gallery"}</span>`;
+
+    const grid=document.createElement("div");
+    grid.className="grid";
+
+    match.images.forEach((id,i)=>{
+
+      const img=new Image();
+
+      img.src=
+        `https://res.cloudinary.com/${cloud}/image/upload/w_400/${id}.jpg`;
+
+      img.onclick=()=>openLightbox(match.images,i);
+
+      grid.appendChild(img);
+
+    });
+
+    section.appendChild(cover);
+    section.appendChild(grid);
+
+    container.appendChild(section);
+
+  });
+
 }
 
 function buildFilters(){
